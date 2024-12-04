@@ -2,3 +2,7 @@
 *.hi
 *.o
 main
+src/main
+CHANGELOG.md
+CHANGELOG.md.save0
+dist-newstyle
