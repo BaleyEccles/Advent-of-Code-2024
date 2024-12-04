@@ -3,6 +3,7 @@ module Day1 where
 import System.IO  
 import Data.List (sort)
 import Data.List (group)
+
 day1 = do 
   -- Day 1
   handle <- openFile "./input/Day1.txt" ReadMode
