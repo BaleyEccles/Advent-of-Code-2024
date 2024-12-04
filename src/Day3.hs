@@ -12,39 +12,31 @@ day3 = do
   -- For testing
   --let program = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
   -- Part 1
-  print program
+  --print program
   let mulRegex = "mul\\([[:digit:]]+,[[:digit:]]+\\)"
-  let outputMul = getAllTextMatches (program =~ mulRegex) :: [String]
-  print outputMul
+  let multList = doRegex program mulRegex
+
   let numRegex = "[[:digit:]]+"
-  let outputNum = concatMap (\x -> [getAllTextMatches (x =~ numRegex) :: [String]]) outputMul
-  print outputNum
-  let intVal = map toPair outputNum
-  print intVal
-  let multSum = sum ((map multiply) intVal)
+  let numPairList = concatMap (\x -> [doRegex x numRegex]) multList
+  let intPairList = map toPair numPairList
+  let multSum = sum ((map multiply) intPairList)
   print "Solution to part 1:" 
   print multSum
 
   -- Part 2
-  let mulEnableRegex = "(mul\\([[:digit:]]+,[[:digit:]]+\\))|(don't\\(\\))|(do\\(\\))"
-  let outputMulEnable = getAllTextMatches (program =~ mulEnableRegex) :: [String]
-  print outputMulEnable
-  let mulEnableBool = map toBool outputMulEnable
+  let mulDoDontRegex = "(mul\\([[:digit:]]+,[[:digit:]]+\\))|(don't\\(\\))|(do\\(\\))"
+  let multDoDontList = doRegex program mulDoDontRegex
+  let multDoDontBool = map toBool multDoDontList
 
+  let removedDontMuls = removeDontMuls multDoDontBool
+  let multList2 = filter removeTrue removedDontMuls
 
-  print mulEnableBool
-  let removedMuls = removeMuls mulEnableBool
-  print removedMuls
-  let mulEnableBoolRemovedTrue = filter removeTrue removedMuls
-  print mulEnableBoolRemovedTrue
-
-  let outputNum2 = concatMap (\x -> [getAllTextMatches (x =~ numRegex) :: [String]]) mulEnableBoolRemovedTrue
-  print outputNum2
-  let intVal2 = map toPair outputNum2
-  print intVal2
-  let multSum2 = sum ((map multiply) intVal2)
+  let numPairList2 = concatMap (\x -> [doRegex x numRegex]) multList2
+  let intPairList2 = map toPair numPairList2
+  let multSum2 = sum ((map multiply) intPairList2)
   print "Solution to part 2:" 
   print multSum2
+
 
   hClose handle
 
@@ -54,28 +46,28 @@ removeTrue s
   | otherwise = True
   
 
-removeMuls :: [String] -> [String]
-removeMuls [] = []  -- Base case: if the list is empty, return an empty list
-removeMuls (x:xs)
+removeDontMuls :: [String] -> [String]
+removeDontMuls [] = []  -- Base case: if the list is empty, return an empty list
+removeDontMuls (x:xs)
   -- Case: "True", "mul"
   | x == "True"  && (head xs /= "False") = 
-      x : removeMuls xs
+      x : removeDontMuls xs
   -- Case: "True", "False"
   | x == "True"  && (head xs == "False") = 
-      removeMuls xs
+      removeDontMuls xs
   -- Case: "False", "True"
   | x == "False"  && (head xs == "True") = 
-      removeMuls xs
+      removeDontMuls xs
   -- Case: "False", "False"
   | x == "False"  && (head xs == "False") = 
-      removeMuls xs
+      removeDontMuls xs
   -- Case: "False", "mul"
   | x == "False"  && (head xs /= "True") = 
-      removeMuls (x : (tail xs))
+      removeDontMuls (x : (tail xs))
   -- Case: "mul"
   | x /= "False" && x /= "True" =
-      x : removeMuls xs
-  | otherwise = removeMuls xs
+      x : removeDontMuls xs
+  | otherwise = removeDontMuls xs
   
 multiply :: (Int, Int) -> Int
 multiply a = (fst a)*(snd a)
@@ -90,3 +82,5 @@ toBool a
   | otherwise = a
   
   
+doRegex :: String -> String -> [String]
+doRegex str regex = getAllTextMatches (str =~ regex) :: [String]
