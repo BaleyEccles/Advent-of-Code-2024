@@ -18,7 +18,6 @@ day2 = do
   --              [1, 3, 2, 4, 5],
   --              [8, 6, 4, 4, 1],
   --              [1, 3, 6, 7, 9]]
-  
   -- Part 1
   let validLevels = map isValidLevel levels
   let safeReportCount = sum validLevels
@@ -76,7 +75,5 @@ isValidLevelDecreasing (x:xs)
   | otherwise = 0
 
 
-
-  
 toInt :: [[String]] -> [[Int]]
 toInt = map (map read)
