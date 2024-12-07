@@ -78,7 +78,7 @@ swapAndVerifyUpdate u r i j
 swapAndVerifyUpdateWithMoreThanOneError :: Update -> [PageOrderingRule] -> Int -> Update
 swapAndVerifyUpdateWithMoreThanOneError u r i 
   | firstValidIndex /= Nothing = allUpdateConfigs !! (fromMaybe 0 firstValidIndex)
-  | firstValidIndex == Nothing = fixUpdate allUpdateConfigs -- THE PROBLEM IS HERE 
+  | firstValidIndex == Nothing = u -- fixUpdate allUpdateConfigs -- THE PROBLEM IS HERE 
   where allUpdateConfigs = map (\j -> swapElement u i j) ([0..(i-1)] ++ [(i+1)..(length u - 1)])
         isValidList = zip (map (\x -> verifyUpdate x r 0) allUpdateConfigs) [0..]
         firstValidIndex = findFirstTrue isValidList
