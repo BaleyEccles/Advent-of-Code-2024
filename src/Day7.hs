@@ -48,24 +48,24 @@ generateAllPossibleSolutionsBinary n i list
 
 -- We can use base 3 numbers to get all the configs 0 -> 3^((length n) - 1) 
 -- Where 0 is + and 1 is *
-generateAllPossibleSolutionsThree :: [Int] -> Int -> [Int] -> [Int]
-generateAllPossibleSolutionsThree n i list
-  | i == max = list
-  | otherwise = generateAllPossibleSolutionsThree n (i + 1) (list ++ [currentResult])
-    where len = length n
-          max = 23^(len - 1)
-          currentResult = applyMultAddConcatList n ((intToOperatorList (i)))
+--generateAllPossibleSolutionsThree :: [Int] -> Int -> [Int] -> [Int]
+--generateAllPossibleSolutionsThree n i list
+--  | i == max = list
+--  | otherwise = generateAllPossibleSolutionsThree n (i + 1) (list ++ [currentResult])
+--    where len = length n
+--          max = 23^(len - 1)
+--          currentResult = applyMultAddConcatList n ((intToOperatorList (i)))
           
 
-applyMultAddConcatList :: [Int] -> [Operator] -> Int
-applyMultAddConcatList ns bs
-  | length ns == 1 = head ns
-  | otherwise = applyMultAddList ((doAddOrMultOrConcat currentOperator n1 n2):nextEquations) (nextOperators)
-  where nextEquations = tail (tail ns)
-        nextOperators = if null bs then [] else tail bs
-        currentOperator = if null (bs) then False else head (bs) 
-        n1 = head ns
-        n2 = if null (tail ns) then 0 else head (tail ns) 
+--applyMultAddConcatList :: [Int] -> [Operator] -> Int
+--applyMultAddConcatList ns bs
+--  | length ns == 1 = head ns
+--  | otherwise = applyMultAddList ((doAddOrMultOrConcat currentOperator n1 n2):nextEquations) (nextOperators)
+--  where nextEquations = tail (tail ns)
+--        nextOperators = if null bs then [] else tail bs
+--        currentOperator = if null (bs) then False else head (bs) 
+--        n1 = head ns
+--        n2 = if null (tail ns) then 0 else head (tail ns) 
 
 doAddOrMultOrConcat :: Operator -> Int -> Int -> Int  
 doAddOrMultOrConcat c a b
