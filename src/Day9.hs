@@ -17,7 +17,7 @@ day9 = do
   print diskMap
   let blocks = convertToBlocks diskMap 0
   print blocks
-  let compactedFile = compactFile blocks
+  let compactedFile = compactFile blocks []
   print compactedFile
   let checkSum = getCheckSum compactedFile
   print checkSum
