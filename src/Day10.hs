@@ -1,7 +1,7 @@
 module Day10 where
 
 import System.IO  
-import Data.List (find, nub)
+import Data.List
 import Data.Maybe (fromMaybe)
 import Text.Regex.TDFA
 import Control.Parallel.Strategies
@@ -14,18 +14,34 @@ day10 = do
   file <- hGetContents handle
   --let file = "89010123\n78121874\n87430965\n96549874\n45678903\n32019012\n01329801\n10456732"
   let heightMap = convertToIntList (lines file)
-  print heightMap
+  --print heightMap
 
   let paths = map (\x -> findPaths x heightMap) heightMap
   print paths
   
   -- For some reason this part is the slow part --
+  -- I think this is becaus there is a lot of non-necacary data in paths
   let score = map getPathScore paths
   print score
   let sumScore = sum score
   print sumScore
+  
+  -- Part 2
+  let rating = sum (map getPathRating paths)
+  print rating
 
 
+getPathRating :: [HeightPos] -> Int
+getPathRating h
+  | length h == 0 = 0
+  | otherwise = sum (countUnique h)
+
+countUnique :: [HeightPos] -> [Int]
+countUnique h = map length grouped
+  where
+    grouped = group (sort h)
+
+  
 getPathScore :: [HeightPos] -> Int
 getPathScore h
   | elem 9 onlyHeight == False = 0
@@ -45,7 +61,7 @@ findPaths heightPos heightMap
 findNextStep :: HeightPos -> [HeightPos] -> [HeightPos] -> [HeightPos]
 findNextStep heightPos heightMap acc
   | height == 9 = acc
-  | otherwise = concatMap (\x -> findNextStep x heightMap (acc ++ [x])) validSurroundingHeights
+  | otherwise = concatMap (\x -> findNextStep x heightMap ([x])) validSurroundingHeights
     where height = fst heightPos
           pos = snd heightPos
           surroundingHeights = getSurroundingHeights heightPos heightMap
