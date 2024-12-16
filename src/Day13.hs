@@ -39,7 +39,7 @@ day13 = do
   let solutionsP2 = map (map convertToInt . toList) (map findSolutions machinesP2)
   --print solutionsP2
   let totalTokensP2 = sum (map getTokens solutionsP2)
-  --print totalTokensP2
+  print totalTokensP2
 
 addLargeNum :: Machine -> Machine
 addLargeNum m = [a, b, c]
